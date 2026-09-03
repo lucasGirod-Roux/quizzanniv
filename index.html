@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QC'aime 🌺</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="leaves leaves--tl">🌿</div>
+  <div class="leaves leaves--tr">🦩</div>
+  <div class="leaves leaves--bl">🍍</div>
+  <div class="leaves leaves--br">🌴</div>
+  <div class="sun">☀️</div>
+  <div class="cloud cloud--1">☁️</div>
+  <div class="cloud cloud--2">☁️</div>
+  <div class="palm-tree palm-tree--left">🌴</div>
+  <div class="palm-tree palm-tree--right">🌴</div>
+  <div class="ocean"></div>
+
+  <main class="app">
+
+    <!-- Écran d'accueil -->
+    <section id="screen-start" class="screen screen--active">
+      <div class="card card--start">
+        <div class="card-photo">
+          <img src="images/moi_anniv.webp" alt="Photo de Lucas" class="card-photo-img">
+        </div>
+        <h1 class="title">QC'aime</h1>
+        <p class="subtitle">Sauras-tu deviner ce que je préfère ? 🍹🌴</p>
+        <p class="intro-text">
+          À chaque question, choisis parmi 4 propositions celle que tu penses être ma préférée.
+          Clique sur « Suivant » pour découvrir la réponse !
+        </p>
+
+        <div class="name-field">
+          <label for="player-name-input" class="name-label">Ton prénom</label>
+          <input type="text" id="player-name-input" class="name-input" placeholder="Ex : Léa" maxlength="30" autocomplete="off">
+          <p id="name-error" class="name-error"></p>
+        </div>
+
+        <button id="btn-start" class="btn btn--primary">Commencer 🌊</button>
+      </div>
+
+      <div class="card card--leaderboard">
+        <h2 class="leaderboard-title">🏆 Classement des joueurs</h2>
+        <div id="leaderboard-list" class="leaderboard-list"></div>
+      </div>
+    </section>
+
+    <!-- Écran de quiz -->
+    <section id="screen-quiz" class="screen">
+      <div class="progress-wrap">
+        <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+        <span id="progress-text" class="progress-text">Question 1 / 8</span>
+      </div>
+
+      <div class="card card--quiz">
+        <div class="theme-tag"><span id="theme-emoji">🍹</span> <span id="theme-name">Boissons</span></div>
+        <h2 id="question-text" class="question-text">Quelle est ma boisson préférée ?</h2>
+
+        <div id="options" class="options"></div>
+
+        <div class="quiz-footer">
+          <p id="feedback" class="feedback"></p>
+          <button id="btn-next" class="btn btn--primary btn--next" disabled>Suivant 🌴</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Écran de fin -->
+    <section id="screen-end" class="screen">
+      <div class="card card--end">
+        <div class="hibiscus">🎉</div>
+        <h1 class="title">Bravo !</h1>
+        <p id="score-text" class="score-text">Tu as trouvé 0 / 0 bonnes réponses</p>
+        <p class="subtitle">Merci d'avoir joué à QC'aime !</p>
+        <div class="end-actions">
+          <button id="btn-restart" class="btn btn--primary">Rejouer 🔄</button>
+          <button id="btn-home" class="btn btn--secondary">Accueil 🏠</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="questions.js"></script>
+  <script type="module" src="db.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

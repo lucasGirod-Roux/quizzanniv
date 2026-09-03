@@ -1,0 +1,549 @@
+/* ==========================================================================
+   QC'aime — Ambiance tropicale / hawaïenne / fleurie
+   ========================================================================== */
+
+:root {
+  --sun: #ffb703;
+  --mango: #ff8c42;
+  --hibiscus: #ff5d8f;
+  --coral: #ff6b6b;
+  --lagoon: #06aed5;
+  --lagoon-dark: #0a7ea4;
+  --leaf: #2ba84a;
+  --leaf-dark: #1f7a37;
+  --cream: #fff8ec;
+  --ink: #2b2118;
+
+  --shadow: 0 12px 30px rgba(43, 33, 24, 0.18);
+  --radius: 28px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 15% 8%, rgba(255, 183, 3, 0.55), transparent 42%),
+    radial-gradient(circle at 88% 12%, rgba(255, 93, 143, 0.45), transparent 48%),
+    radial-gradient(circle at 15% 95%, rgba(6, 174, 213, 0.4), transparent 50%),
+    radial-gradient(circle at 90% 92%, rgba(43, 168, 74, 0.35), transparent 45%),
+    linear-gradient(165deg, #fff2d6 0%, #ffdca0 30%, #ffb98a 55%, #ff9ec2 78%, #a3e0e8 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.leaves {
+  position: fixed;
+  font-size: 4rem;
+  opacity: 0.5;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.1));
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+  animation: sway 5s ease-in-out infinite;
+  transform-origin: 60% 20%;
+}
+.leaves--tl { top: -1rem; left: -1rem; transform: rotate(-15deg); }
+.leaves--tr { top: -0.5rem; right: -1rem; transform: rotate(20deg); font-size: 3.5rem; animation-delay: -1.5s; }
+.leaves--bl { bottom: -1rem; left: -0.5rem; transform: rotate(10deg); font-size: 3.5rem; animation-delay: -3s; }
+.leaves--br { bottom: -1.5rem; right: -1.5rem; transform: rotate(-10deg); animation-delay: -4s; }
+
+.sun {
+  position: fixed;
+  top: 2rem;
+  right: 3rem;
+  font-size: 4.5rem;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 0 45px rgba(255, 183, 3, 0.85));
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.cloud {
+  position: fixed;
+  top: 4%;
+  font-size: 2.6rem;
+  opacity: 0.75;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.06));
+  animation: drift 40s linear infinite;
+}
+.cloud--1 { left: -10%; top: 8%; animation-duration: 45s; }
+.cloud--2 { left: -15%; top: 18%; font-size: 2rem; opacity: 0.6; animation-duration: 60s; animation-delay: -20s; }
+
+.palm-tree {
+  position: fixed;
+  bottom: -1.5rem;
+  font-size: 9rem;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 10px 14px rgba(0,0,0,0.15));
+  transform-origin: bottom center;
+  animation: sway 6s ease-in-out infinite;
+}
+.palm-tree--left { left: -2.5rem; transform: scaleX(-1); }
+.palm-tree--right { right: -2.5rem; animation-delay: -3s; }
+
+.ocean {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 90px;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(6, 174, 213, 0.25) 0%, rgba(10, 126, 164, 0.55) 100%);
+  -webkit-mask-image: radial-gradient(circle at 20px 0, transparent 20px, black 21px);
+  mask-image: radial-gradient(circle at 20px 0, transparent 20px, black 21px);
+  -webkit-mask-size: 40px 22px;
+  mask-size: 40px 22px;
+  -webkit-mask-repeat: repeat-x;
+  mask-repeat: repeat-x;
+  -webkit-mask-position: top;
+  mask-position: top;
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-6deg); }
+  50% { transform: rotate(6deg); }
+}
+.palm-tree--left.palm-tree { animation-name: sway-left; }
+@keyframes sway-left {
+  0%, 100% { transform: scaleX(-1) rotate(-6deg); }
+  50% { transform: scaleX(-1) rotate(6deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+@keyframes drift {
+  from { transform: translateX(0); }
+  to { transform: translateX(130vw); }
+}
+
+@media (max-width: 600px) {
+  .leaves { font-size: 2.6rem; }
+  .palm-tree { font-size: 5.5rem; }
+  .sun { font-size: 3rem; right: 1.2rem; top: 1.2rem; }
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+/* ---------- Screens ---------- */
+
+.screen {
+  display: none;
+  width: 100%;
+  max-width: 560px;
+  animation: fadeUp 0.45s ease;
+}
+.screen--active { display: block; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Card ---------- */
+
+.card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
+  border: 3px solid rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2.5rem 2rem;
+  text-align: center;
+}
+
+.hibiscus {
+  font-size: 3.2rem;
+  margin-bottom: 0.25rem;
+}
+
+/* ---------- Photo d'accueil (bandeau haut de carte) ---------- */
+
+.card--start {
+  padding-top: 0;
+  overflow: hidden;
+}
+
+.card-photo {
+  position: relative;
+  margin: 0 -2rem 1.6rem;
+}
+
+.card-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(43, 33, 24, 0.05) 70%, rgba(255, 248, 236, 0.95) 100%);
+}
+
+.title {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 800;
+  font-size: 2.6rem;
+  margin: 0.2rem 0 0.4rem;
+  background: linear-gradient(90deg, var(--hibiscus), var(--mango), var(--sun));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--lagoon-dark);
+  margin: 0 0 1rem;
+}
+
+.intro-text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #5a4a3a;
+  margin-bottom: 1.8rem;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 999px;
+  padding: 0.9rem 2.2rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.btn--primary {
+  background: linear-gradient(90deg, var(--coral), var(--hibiscus));
+  color: white;
+  box-shadow: 0 8px 20px rgba(255, 93, 143, 0.4);
+}
+.btn--primary:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 24px rgba(255, 93, 143, 0.5);
+}
+.btn--primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.99);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn--next {
+  margin-top: 0.6rem;
+}
+
+.btn--secondary {
+  background: linear-gradient(90deg, var(--lagoon), var(--lagoon-dark));
+  color: white;
+  box-shadow: 0 8px 20px rgba(6, 174, 213, 0.4);
+}
+.btn--secondary:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 24px rgba(6, 174, 213, 0.5);
+}
+.btn--secondary:active:not(:disabled) {
+  transform: translateY(0) scale(0.99);
+}
+
+.end-actions {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+/* ---------- Name field ---------- */
+
+.name-field {
+  text-align: left;
+  margin-bottom: 1.4rem;
+}
+
+.name-label {
+  display: block;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--lagoon-dark);
+  margin-bottom: 0.4rem;
+}
+
+.name-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 14px;
+  border: 2px solid rgba(6, 174, 213, 0.3);
+  background: rgba(255, 255, 255, 0.8);
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem;
+  color: var(--ink);
+}
+.name-input:focus {
+  outline: none;
+  border-color: var(--lagoon);
+  box-shadow: 0 0 0 3px rgba(6, 174, 213, 0.18);
+}
+
+.name-error {
+  min-height: 1.2rem;
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--coral);
+}
+
+/* ---------- Leaderboard ---------- */
+
+.card--leaderboard {
+  margin-top: 1.4rem;
+  text-align: left;
+}
+
+.leaderboard-title {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.05rem;
+  text-align: center;
+  color: var(--mango);
+  margin: 0 0 0.9rem;
+}
+
+.leaderboard-list {
+  max-height: 220px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-right: 0.2rem;
+}
+
+.leaderboard-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.7rem;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(6, 174, 213, 0.2);
+  border-radius: 12px;
+  padding: 0.55rem 0.9rem;
+}
+
+.leaderboard-name {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  color: var(--ink);
+  flex: 1 1 auto;
+  min-width: 70px;
+}
+
+.leaderboard-score {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--leaf-dark);
+  background: rgba(43, 168, 74, 0.15);
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+}
+
+.leaderboard-date {
+  width: 100%;
+  font-size: 0.78rem;
+  color: #7a6a58;
+}
+
+.leaderboard-empty {
+  text-align: center;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #7a6a58;
+}
+
+/* ---------- Progress ---------- */
+
+.progress-wrap {
+  max-width: 560px;
+  margin: 0 auto 1rem;
+  text-align: center;
+}
+
+.progress-bar {
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.5);
+  border: 2px solid rgba(255,255,255,0.7);
+  overflow: hidden;
+  margin-bottom: 0.4rem;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--leaf), var(--lagoon));
+  border-radius: 999px;
+  transition: width 0.35s ease;
+}
+
+.progress-text {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--lagoon-dark);
+}
+
+/* ---------- Quiz card ---------- */
+
+.theme-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: white;
+  background: linear-gradient(90deg, var(--leaf), var(--leaf-dark));
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+}
+
+.question-text {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1.6rem;
+  color: var(--ink);
+}
+
+.options {
+  display: grid;
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+
+.option {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-align: left;
+  padding: 1rem 1.2rem;
+  border-radius: 18px;
+  border: 2px solid rgba(6, 174, 213, 0.25);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.option:hover:not(.option--locked) {
+  border-color: var(--lagoon);
+  background: rgba(6, 174, 213, 0.1);
+  transform: translateY(-1px);
+}
+
+.option-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  background: var(--lagoon);
+  color: white;
+  font-family: 'Baloo 2', cursive;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.option--selected {
+  border-color: var(--mango);
+  background: rgba(255, 140, 66, 0.15);
+}
+.option--selected .option-letter {
+  background: var(--mango);
+}
+
+.option--correct {
+  border-color: var(--leaf);
+  background: rgba(43, 168, 74, 0.18);
+}
+.option--correct .option-letter {
+  background: var(--leaf);
+}
+
+.option--wrong {
+  border-color: var(--coral);
+  background: rgba(255, 107, 107, 0.15);
+}
+.option--wrong .option-letter {
+  background: var(--coral);
+}
+
+.option--locked {
+  cursor: default;
+}
+
+.feedback {
+  min-height: 1.4rem;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin: 0.2rem 0 0.6rem;
+}
+.feedback--correct { color: var(--leaf-dark); }
+.feedback--wrong { color: var(--coral); }
+
+/* ---------- End screen ---------- */
+
+.score-text {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--mango);
+  margin-bottom: 0.4rem;
+}
+
+@media (max-width: 480px) {
+  .card { padding: 2rem 1.4rem; }
+  .title { font-size: 2.1rem; }
+  .question-text { font-size: 1.25rem; }
+  .card-photo { margin: 0 -1.4rem 1.3rem; height: 190px; }
+}
