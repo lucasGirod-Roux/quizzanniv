@@ -294,7 +294,7 @@ body {
 
 .name-field {
   text-align: left;
-  margin-bottom: 1.4rem;
+  margin-bottom: 1rem;
 }
 
 .name-label {
@@ -544,4 +544,7 @@ body {
 @media (max-width: 480px) {
   .title { font-size: 2.1rem; }
   .question-text { font-size: 1.25rem; }
+  .card-photo-img {
+    max-height: 264px;
+  }
 }
