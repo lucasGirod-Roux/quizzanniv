@@ -184,16 +184,10 @@ btnNext.addEventListener('click', nextQuestion);
 btnRestart.addEventListener('click', startQuiz);
 btnHome.addEventListener('click', goHome);
 
-function startLeaderboardSync() {
+if (window.QcaimeDB) {
   window.QcaimeDB.subscribeScores(scores => {
     cachedScores = scores;
     if (screenStart.classList.contains('screen--active')) renderLeaderboard();
   });
-}
-
-if (window.QcaimeDB) {
-  startLeaderboardSync();
-} else {
-  document.addEventListener('qcaime-db-ready', startLeaderboardSync);
 }
 renderLeaderboard();

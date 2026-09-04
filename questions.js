@@ -65,5 +65,40 @@ const QUESTIONS = [
     question: "Quel est le groupe de musique préféré de Lucas ?",
     options: ["Imagine Dragon", "Daft Punk", "Ultra Vomit", "Little Big"],
     answerIndex: 3
+  },
+  {
+    theme: "Série",
+    emoji: "📺",
+    question: "Quelle est la série préférée de Lucas ?",
+    options: ["Gotham", "The Boys", "Stranger Things", "Squid Game"],
+    answerIndex: 1
+  },
+  {
+    theme: "Boisson sucrée",
+    emoji: "🥤",
+    question: "Quelle est la boisson sucrée préférée de Lucas ?",
+    options: ["Chocolat chaud", "Café glacé", "Cappuccino", "Granita"],
+    answerIndex: 1
+  },
+  {
+    theme: "Youtuber",
+    emoji: "🎥",
+    question: "Quel est le Youtuber préféré de Lucas ?",
+    options: ["Squeezie", "Amixem", "Joyca", "Cyprien"],
+    answerIndex: 1
+  },
+  {
+    theme: "Jeux vidéo",
+    emoji: "🎮",
+    question: "Quel est le jeu vidéo préféré de Lucas ?",
+    options: ["Detroit: Become Human", "Spiderman ps4", "The Quarry", "The last of us"],
+    answerIndex: 0
+  },
+  {
+    theme: "Film de MCU",
+    emoji: "🦸",
+    question: "Quel est le film de MCU préféré de Lucas ?",
+    options: ["Gardien de la galaxie 3", "Spiderman Brand New Day", "Avengers : L'Ère d'Ultron", "Les Éternels"],
+    answerIndex: 3
   }
 ];

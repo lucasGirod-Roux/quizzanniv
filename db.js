@@ -1,80 +1,70 @@
 // ==========================================================================
-// QC'aime — Connexion à la base de données partagée (Firebase Firestore)
+// QC'aime — Connexion à la base de données partagée (Supabase)
 // ==========================================================================
-// Ce fichier permet à TOUS les joueurs (sur leurs propres téléphones) de
-// voir le même classement, qui ne se vide jamais et reste visible pour tout
-// le monde, en direct.
+// Permet à TOUS les joueurs (sur leurs propres téléphones) de voir le même
+// classement, en direct, sans qu'il ne se vide jamais.
 //
-// ÉTAPES POUR ACTIVER (5 minutes, gratuit) :
-// 1. Va sur https://console.firebase.google.com et crée un projet.
-// 2. Dans le projet, ajoute une "application Web" (icône </>) et copie
-//    l'objet de config qu'on te donne (apiKey, authDomain, etc.) ci-dessous,
+// ÉTAPES POUR ACTIVER :
+// 1. Dans ton projet Supabase (quizzanniv) -> Project Settings -> API,
+//    récupère "Project URL" et la clé "anon public", colle-les ci-dessous
 //    à la place des valeurs "REMPLACE_MOI".
-// 3. Dans le menu de gauche : Firestore Database -> Créer une base de
-//    données -> mode "production" (peu importe la région).
-// 4. Dans l'onglet "Règles" de Firestore, remplace le contenu par :
+// 2. Dans SQL Editor, exécute :
 //
-//      rules_version = '2';
-//      service cloud.firestore {
-//        match /databases/{database}/documents {
-//          match /scores/{scoreId} {
-//            allow read: if true;
-//            allow create: if request.resource.data.keys().hasOnly(['name', 'score', 'total', 'date'])
-//                          && request.resource.data.name is string
-//                          && request.resource.data.name.size() <= 30
-//                          && request.resource.data.score is int
-//                          && request.resource.data.total is int;
-//            allow update, delete: if false;
-//          }
-//        }
-//      }
+//      create table scores (
+//        id uuid primary key default gen_random_uuid(),
+//        name text not null check (char_length(name) <= 30),
+//        score int not null,
+//        total int not null,
+//        date timestamptz not null default now()
+//      );
 //
-//    (Ça autorise tout le monde à lire le classement et à ajouter SON score,
-//    mais personne ne peut modifier ou supprimer les scores existants.)
-// 5. Publie les règles, et c'est prêt !
+//      alter table scores enable row level security;
+//
+//      create policy "Public can read scores" on scores
+//        for select using (true);
+//
+//      create policy "Public can insert scores" on scores
+//        for insert with check (true);
+//
+//      alter publication supabase_realtime add table scores;
+//
+//    (Ça crée la table, autorise tout le monde à lire le classement et à
+//    ajouter SON score, et active le temps réel pour la mise à jour live.)
 // ==========================================================================
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  onSnapshot,
-  query,
-  orderBy,
-} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "REMPLACE_MOI",
-  authDomain: "REMPLACE_MOI",
-  projectId: "REMPLACE_MOI",
-  storageBucket: "REMPLACE_MOI",
-  messagingSenderId: "REMPLACE_MOI",
-  appId: "REMPLACE_MOI",
-};
+const SUPABASE_URL = "https://wkujhivyacosmfaioyhq.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_h4DGrLTi7hb0mRqPSAnyxA_PCtqmE8K";
 
 try {
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const scoresCol = collection(db, "scores");
-  const scoresQuery = query(scoresCol, orderBy("date", "desc"));
+  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   window.QcaimeDB = {
-    saveScoreEntry(entry) {
-      return addDoc(scoresCol, entry).catch(err => {
-        console.error("[QC'aime] Impossible d'enregistrer le score :", err);
-      });
+    async saveScoreEntry(entry) {
+      const { error } = await client.from('scores').insert(entry);
+      if (error) console.error("[QC'aime] Impossible d'enregistrer le score :", error);
     },
+
     subscribeScores(callback) {
-      return onSnapshot(
-        scoresQuery,
-        snapshot => callback(snapshot.docs.map(doc => doc.data())),
-        err => console.error("[QC'aime] Impossible de charger le classement :", err)
-      );
+      async function fetchAndEmit() {
+        const { data, error } = await client
+          .from('scores')
+          .select('*')
+          .order('date', { ascending: false });
+        if (error) {
+          console.error("[QC'aime] Impossible de charger le classement :", error);
+          return;
+        }
+        callback(data);
+      }
+
+      fetchAndEmit();
+
+      client
+        .channel('public:scores')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'scores' }, fetchAndEmit)
+        .subscribe();
     },
   };
-
-  document.dispatchEvent(new CustomEvent('qcaime-db-ready'));
 } catch (err) {
-  console.error("[QC'aime] Firebase n'a pas pu être initialisé — as-tu bien renseigné firebaseConfig dans db.js ?", err);
+  console.error("[QC'aime] Supabase n'a pas pu être initialisé — as-tu bien renseigné SUPABASE_URL et SUPABASE_ANON_KEY dans db.js ?", err);
 }

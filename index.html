@@ -30,11 +30,10 @@
         <div class="card-photo">
           <img src="images/moi_anniv.webp" alt="Photo de Lucas" class="card-photo-img">
         </div>
-        <h1 class="title">QC'aime</h1>
-        <p class="subtitle">Sauras-tu deviner ce que je préfère ? 🍹🌴</p>
+        <h1 class="title">🍹 QC'aime 🌴</h1>
+        <p class="subtitle">Me connais-tu vraiment ? 🤔</p>
         <p class="intro-text">
-          À chaque question, choisis parmi 4 propositions celle que tu penses être ma préférée.
-          Clique sur « Suivant » pour découvrir la réponse !
+          Tu penses connaître Lucas ? À chaque question, 4 choix qu'il adore — mais il en aime un plus que les autres. Sauras-tu deviner lequel ?
         </p>
 
         <div class="name-field">
@@ -43,7 +42,7 @@
           <p id="name-error" class="name-error"></p>
         </div>
 
-        <button id="btn-start" class="btn btn--primary">Commencer 🌊</button>
+        <button id="btn-start" class="btn btn--primary">Commencer</button>
       </div>
 
       <div class="card card--leaderboard">
@@ -89,7 +88,8 @@
   </main>
 
   <script src="questions.js"></script>
-  <script type="module" src="db.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="db.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
