@@ -20,6 +20,7 @@ const themeName = document.getElementById('theme-name');
 const questionText = document.getElementById('question-text');
 const optionsWrap = document.getElementById('options');
 const feedback = document.getElementById('feedback');
+const questionInfo = document.getElementById('question-info');
 const progressFill = document.getElementById('progress-fill');
 const progressText = document.getElementById('progress-text');
 const scoreText = document.getElementById('score-text');
@@ -111,6 +112,7 @@ function renderQuestion() {
   hasAnswered = false;
   feedback.textContent = '';
   feedback.className = 'feedback';
+  questionInfo.textContent = '';
   btnNext.disabled = true;
 
   const q = QUESTIONS[order[currentIndex]];
@@ -148,12 +150,14 @@ function selectOption(selectedIndex, q) {
 
   if (selectedIndex === q.answerIndex) {
     score++;
-    feedback.textContent = '✅ Bien joué, c\'est la bonne réponse !';
+    feedback.textContent = '✅ Bien joué !';
     feedback.classList.add('feedback--correct');
   } else {
-    feedback.textContent = '❌ Raté, ce n\'était pas ça !';
+    feedback.textContent = '❌ Raté !';
     feedback.classList.add('feedback--wrong');
   }
+
+  questionInfo.textContent = q.info || '';
 
   btnNext.disabled = false;
 }
