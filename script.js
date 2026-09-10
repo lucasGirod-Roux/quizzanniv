@@ -8,8 +8,11 @@ const screenEnd = document.getElementById('screen-end');
 
 const btnStart = document.getElementById('btn-start');
 const btnNext = document.getElementById('btn-next');
-const btnRestart = document.getElementById('btn-restart');
 const btnHome = document.getElementById('btn-home');
+
+const leaderboardCard = document.getElementById('leaderboard-card');
+const btnLeaderboardExpand = document.getElementById('btn-leaderboard-expand');
+const btnLeaderboardClose = document.getElementById('btn-leaderboard-close');
 
 const nameInput = document.getElementById('player-name-input');
 const nameError = document.getElementById('name-error');
@@ -24,6 +27,7 @@ const questionInfo = document.getElementById('question-info');
 const progressFill = document.getElementById('progress-fill');
 const progressText = document.getElementById('progress-text');
 const scoreText = document.getElementById('score-text');
+const endTitle = document.getElementById('end-title');
 
 const LETTERS = ['A', 'B', 'C', 'D'];
 
@@ -55,8 +59,13 @@ function formatDateTime(iso) {
   return `${datePart} à ${timePart}`;
 }
 
+const MEDALS = ['🥇', '🥈', '🥉'];
+
 function renderLeaderboard() {
-  const scores = cachedScores.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+  const scores = cachedScores.slice().sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    return new Date(b.date) - new Date(a.date);
+  });
   leaderboardList.innerHTML = '';
 
   if (scores.length === 0) {
@@ -64,9 +73,15 @@ function renderLeaderboard() {
     return;
   }
 
-  scores.forEach(entry => {
+  scores.forEach((entry, i) => {
     const row = document.createElement('div');
     row.className = 'leaderboard-row';
+    if (i < 3) row.classList.add('leaderboard-row--top');
+
+    const rankEl = document.createElement('span');
+    rankEl.className = 'leaderboard-rank';
+    rankEl.textContent = i < 3 ? MEDALS[i] : `${i + 1}`;
+
     const nameEl = document.createElement('span');
     nameEl.className = 'leaderboard-name';
     nameEl.textContent = entry.name;
@@ -76,7 +91,7 @@ function renderLeaderboard() {
     const dateEl = document.createElement('span');
     dateEl.className = 'leaderboard-date';
     dateEl.textContent = formatDateTime(entry.date);
-    row.append(nameEl, scoreEl, dateEl);
+    row.append(rankEl, nameEl, scoreEl, dateEl);
     leaderboardList.appendChild(row);
   });
 }
@@ -171,8 +186,17 @@ function nextQuestion() {
   }
 }
 
+function getEndMessage(score) {
+  if (score <= 5) return "T'es sûr qu'on se connaît ?";
+  if (score <= 10) return "Mouais, faut qu'on discute plus souvent";
+  if (score <= 13) return "C'est correct, mais je m'attendais à mieux";
+  if (score <= 16) return "Bien joué ! Ça, c'est quelqu'un qui m'écoute";
+  return "Bravo, on est très proches toi et moi";
+}
+
 function endQuiz() {
   progressFill.style.width = '100%';
+  endTitle.textContent = getEndMessage(score);
   scoreText.textContent = `${playerName}, tu as trouvé ${score} / ${order.length} bonnes réponses`;
   if (window.QcaimeDB) {
     window.QcaimeDB.saveScoreEntry({ name: playerName, score, total: order.length, date: new Date().toISOString() });
@@ -185,8 +209,14 @@ nameInput.addEventListener('keydown', e => {
   if (e.key === 'Enter') tryStartQuiz();
 });
 btnNext.addEventListener('click', nextQuestion);
-btnRestart.addEventListener('click', startQuiz);
 btnHome.addEventListener('click', goHome);
+
+btnLeaderboardExpand.addEventListener('click', () => {
+  leaderboardCard.classList.add('card--leaderboard-fullscreen');
+});
+btnLeaderboardClose.addEventListener('click', () => {
+  leaderboardCard.classList.remove('card--leaderboard-fullscreen');
+});
 
 if (window.QcaimeDB) {
   window.QcaimeDB.subscribeScores(scores => {

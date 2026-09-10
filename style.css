@@ -227,6 +227,11 @@ body {
   margin: 0 0 1rem;
 }
 
+#end-title {
+  font-size: 1.6rem;
+  line-height: 1.3;
+}
+
 .intro-text {
   font-size: 0.95rem;
   line-height: 1.5;
@@ -335,6 +340,15 @@ body {
 .card--leaderboard {
   margin-top: 1.4rem;
   text-align: left;
+  position: relative;
+}
+
+.leaderboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0 0 0.9rem;
 }
 
 .leaderboard-title {
@@ -342,7 +356,32 @@ body {
   font-size: 1.05rem;
   text-align: center;
   color: var(--mango);
-  margin: 0 0 0.9rem;
+  margin: 0;
+}
+
+.leaderboard-expand-btn {
+  font-size: 1.05rem;
+  line-height: 1;
+  background: rgba(255, 140, 66, 0.15);
+  color: var(--mango);
+  border: none;
+  border-radius: 999px;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.leaderboard-expand-btn:hover {
+  background: rgba(255, 140, 66, 0.28);
+  transform: scale(1.06);
+}
+
+.leaderboard-close-btn {
+  display: none;
 }
 
 .leaderboard-list {
@@ -354,6 +393,51 @@ body {
   padding-right: 0.2rem;
 }
 
+.card--leaderboard-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  max-width: none;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 1.6rem 1.4rem;
+}
+.card--leaderboard-fullscreen .leaderboard-header {
+  padding-right: 2.4rem;
+}
+.card--leaderboard-fullscreen .leaderboard-expand-btn {
+  display: none;
+}
+.card--leaderboard-fullscreen .leaderboard-list {
+  max-height: none;
+  flex: 1;
+}
+.card--leaderboard-fullscreen .leaderboard-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 107, 107, 0.15);
+  color: var(--coral);
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.card--leaderboard-fullscreen .leaderboard-close-btn:hover {
+  background: rgba(255, 107, 107, 0.3);
+  transform: scale(1.06);
+}
+
 .leaderboard-row {
   display: flex;
   align-items: baseline;
@@ -363,6 +447,24 @@ body {
   border: 1px solid rgba(6, 174, 213, 0.2);
   border-radius: 12px;
   padding: 0.55rem 0.9rem;
+}
+
+.leaderboard-row--top {
+  background: rgba(255, 183, 3, 0.2);
+  border-color: rgba(255, 183, 3, 0.45);
+}
+
+.leaderboard-rank {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #7a6a58;
+  min-width: 1.5rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+.leaderboard-row--top .leaderboard-rank {
+  font-size: 1.2rem;
 }
 
 .leaderboard-name {

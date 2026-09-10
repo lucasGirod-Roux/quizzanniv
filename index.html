@@ -47,9 +47,13 @@
         <button id="btn-start" class="btn btn--primary">Commencer</button>
       </div>
 
-      <div class="card card--leaderboard">
-        <h2 class="leaderboard-title">🏆 Classement des joueurs</h2>
+      <div class="card card--leaderboard" id="leaderboard-card">
+        <div class="leaderboard-header">
+          <h2 class="leaderboard-title">🏆 Classement des joueurs</h2>
+          <button id="btn-leaderboard-expand" class="leaderboard-expand-btn" aria-label="Agrandir le classement" title="Agrandir">⛶</button>
+        </div>
         <div id="leaderboard-list" class="leaderboard-list"></div>
+        <button id="btn-leaderboard-close" class="leaderboard-close-btn" aria-label="Fermer le classement" title="Fermer">✕</button>
       </div>
     </section>
 
@@ -78,12 +82,11 @@
     <section id="screen-end" class="screen">
       <div class="card card--end">
         <div class="hibiscus">🎉</div>
-        <h1 class="title">Bravo !</h1>
+        <h1 id="end-title" class="title">Bravo !</h1>
         <p id="score-text" class="score-text">Tu as trouvé 0 / 0 bonnes réponses</p>
         <p class="subtitle">Merci d'avoir joué à QC'aime !</p>
         <div class="end-actions">
-          <button id="btn-restart" class="btn btn--primary">Rejouer 🔄</button>
-          <button id="btn-home" class="btn btn--secondary">Accueil 🏠</button>
+          <button id="btn-home" class="btn btn--primary">Accueil 🏠</button>
         </div>
       </div>
     </section>
