@@ -385,7 +385,7 @@ body {
 }
 
 .leaderboard-list {
-  max-height: 220px;
+  max-height: 228px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
