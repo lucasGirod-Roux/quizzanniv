@@ -385,13 +385,21 @@ body {
 }
 
 .leaderboard-list {
-  max-height: 228px;
+  max-height: 230px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   padding-right: 0.2rem;
+
+  /* Masquer la scrollbar pour Webkit, Firefox et IE/Edge */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
 }
+.leaderboard-list::-webkit-scrollbar {
+  display: none; /* Chrome, Safari et Opera */
+}
+
 
 .card--leaderboard-fullscreen {
   position: fixed;
